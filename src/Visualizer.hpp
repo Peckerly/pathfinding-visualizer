@@ -2,8 +2,8 @@
 
 class Visualizer {
 public:
-	Visualizer() = default;
-	~Visualizer() = default;
+	Visualizer();
+	~Visualizer();
 
 	void Run();
 
