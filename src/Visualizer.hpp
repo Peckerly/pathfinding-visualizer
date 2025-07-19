@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Grid.hpp"
+
 class Visualizer {
 public:
 	Visualizer();
@@ -7,6 +9,8 @@ public:
 
 	void Run();
 
+	void DrawGrid();
+
 private:
-	//TODO
+	Grid mGrid;
 };

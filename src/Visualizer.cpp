@@ -1,15 +1,14 @@
 #include "Visualizer.hpp"
+#include "Constants.hpp"
 
 #include "raylib.h"
 
 #include <string>
 
-static constexpr int sWidth = 1280;
-static constexpr int sHeight = 720;
 static const std::string sTitle = "Pathfinding Visualizer";
 
 Visualizer::Visualizer() {
-	InitWindow(sWidth, sHeight, sTitle.c_str());
+	InitWindow(gWindowSize, gWindowSize, sTitle.c_str());
 }
 
 Visualizer::~Visualizer()
@@ -22,9 +21,37 @@ void Visualizer::Run() {
 	{
 		BeginDrawing();
 
-		ClearBackground(RAYWHITE);
-		DrawText("Hello world!", sWidth / 2, sHeight / 2, 20, LIGHTGRAY);
+		ClearBackground(LIGHTGRAY);
 
+		DrawGrid();
+		
 		EndDrawing();
+	}
+}
+
+void Visualizer::DrawGrid() {
+	auto& data = mGrid.GetData();
+	for (int i = 0; i < data.size(); i++)
+	{
+		Color cellColor;
+		switch (data.at(i))
+		{
+			case Cell::Empty:
+			{
+				cellColor = WHITE;
+				break;
+			}
+			default:
+			{
+				cellColor = BLACK;
+				break;
+			}
+		}
+
+		int x = (i % gGridSize) * gCellSize;
+		int y = (i / gGridSize) * gCellSize;
+
+		DrawRectangle(x, y, gCellSize, gCellSize, cellColor);
+		DrawRectangleLines(x, y, gCellSize, gCellSize, BLACK);
 	}
 }
