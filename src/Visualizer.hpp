@@ -8,9 +8,6 @@ public:
 	~Visualizer();
 
 	void Run();
-
-	void DrawGrid();
-
 private:
 	Grid mGrid;
 };

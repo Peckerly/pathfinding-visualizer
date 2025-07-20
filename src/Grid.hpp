@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Constants.hpp"
-
 #include <array>
+
+static constexpr int sGridSize = 50;
+// Cell size is equal to 20, because we don't want to render the grid on the whole screen. We're leaving space for the GUI.
+static constexpr int sCellSize = 20;
 
 enum class Cell : uint8_t {
 	Empty = 0,
@@ -19,8 +21,8 @@ public:
 	Grid();
 	~Grid() = default;
 
-	const auto GetData() const { return mGridData; }
+	void Draw();
 
 private:
-	std::array<Cell, gGridSize * gGridSize> mGridData;
+	std::array<Cell, sGridSize * sGridSize> mGridData;
 };
