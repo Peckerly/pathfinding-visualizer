@@ -18,14 +18,23 @@ Visualizer::~Visualizer()
 	CloseWindow();
 }
 
+void Visualizer::Update() {
+
+}
+
+void Visualizer::Render() {
+	BeginDrawing();
+
+	ClearBackground(BLACK);
+	mGrid.Draw();
+
+	EndDrawing();
+}
+
 void Visualizer::Run() {
 	while (!WindowShouldClose())
 	{
-		BeginDrawing();
-
-		ClearBackground(BLACK);
-		mGrid.Draw();
-		
-		EndDrawing();
+		Update();
+		Render();
 	}
 }

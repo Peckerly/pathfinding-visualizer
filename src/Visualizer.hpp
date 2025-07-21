@@ -7,6 +7,9 @@ public:
 	Visualizer();
 	~Visualizer();
 
+	void Update();
+	void Render();
+
 	void Run();
 private:
 	Grid mGrid;
