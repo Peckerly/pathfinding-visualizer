@@ -2,6 +2,9 @@
 
 #include "raylib.h"
 
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
 #include <string>
 
 static constexpr int sWindowWidth = 1500;
@@ -19,18 +22,25 @@ Visualizer::~Visualizer()
 }
 
 void Visualizer::Update() {
-	switch (mVisState) {
-		case Stage::PaintWalls: {
-			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-				auto mousePos = GetMousePosition();
-				mGrid.Paint(mousePos.x, mousePos.y, Cell::Wall);
-			}
-			break;
+	if (!mIsPathfinding) {
+		auto mousePos = GetMousePosition();
+		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+			mGrid.Paint(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y), Cell::Wall);
 		}
-		default: {
-			break;
+		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+			mGrid.Paint(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y), Cell::Empty);
+		}
+		if (IsKeyPressed(KEY_S) && mStartingPoint == -1) {
+			mStartingPoint = mGrid.ChooseStart(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y));
+		}
+		if (IsKeyPressed(KEY_T) && mEndingPoint == -1) {
+			mEndingPoint = mGrid.ChooseEnd(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y));
 		}
 	}
+}
+
+void Visualizer::DrawGUI() {
+	DrawText("Choose drawing mode:", 1100, 100, 25, WHITE);
 }
 
 void Visualizer::Render() {
@@ -38,6 +48,7 @@ void Visualizer::Render() {
 
 	ClearBackground(BLACK);
 	mGrid.Draw();
+	DrawGUI();
 
 	EndDrawing();
 }

@@ -6,6 +6,30 @@ Grid::Grid() {
 	mGridData.fill(Cell::Empty);
 }
 
+const int Grid::ChooseStart(const int x, const int y)
+{
+	const int screenX = x / sCellSize;
+	const int screenY = y / sCellSize;
+
+	if (screenX >= 0 && screenX < sGridSize && screenY >= 0 && screenY < sGridSize) {
+		mGridData[sGridSize * screenY + screenX] = Cell::Start;
+		return sGridSize * screenY + screenX;
+	}
+	return -1;
+}
+
+const int Grid::ChooseEnd(const int x, const int y)
+{
+	const int screenX = x / sCellSize;
+	const int screenY = y / sCellSize;
+
+	if (screenX >= 0 && screenX < sGridSize && screenY >= 0 && screenY < sGridSize) {
+		mGridData[sGridSize * screenY + screenX] = Cell::End;
+		return sGridSize * screenY + screenX;
+	}
+	return -1;
+}
+
 void Grid::Paint(const int x, const int y, Cell cellType) {
 	const int screenX = x / sCellSize;
 	const int screenY = y / sCellSize;
@@ -16,18 +40,22 @@ void Grid::Paint(const int x, const int y, Cell cellType) {
 }
 
 void Grid::Draw() {
-	for (int i = 0; i < mGridData.size(); i++)
-	{
+	for (int i = 0; i < mGridData.size(); i++) {
 		Color cellColor;
-		switch (mGridData[i])
-		{
-			case Cell::Empty:
-			{
+		switch (mGridData[i]) {
+			case Cell::Empty: {
 				cellColor = LIGHTGRAY;
 				break;
 			}
-			default:
-			{
+			case Cell::Start: {
+				cellColor = GREEN;
+				break;
+			}
+			case Cell::Wall: {
+				cellColor = DARKGRAY;
+				break;
+			}
+			default: {
 				cellColor = BLACK;
 				break;
 			}

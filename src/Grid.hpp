@@ -21,6 +21,9 @@ public:
 	Grid();
 	~Grid() = default;
 
+	const int ChooseStart(const int x, const int y);
+	const int ChooseEnd(const int x, const int y);
+
 	void Paint(const int x, const int y, Cell cellType);
 
 	void Draw();
