@@ -30,11 +30,11 @@ void Visualizer::Update() {
 		if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
 			mGrid.Paint(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y), Cell::Empty);
 		}
+
 		if (IsKeyPressed(KEY_S) && mStartingPoint == -1) {
-			mStartingPoint = mGrid.ChooseStart(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y));
-		}
-		if (IsKeyPressed(KEY_T) && mEndingPoint == -1) {
-			mEndingPoint = mGrid.ChooseEnd(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y));
+			mStartingPoint = mGrid.MarkStartOrEnd(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y), Cell::Start);
+		} else if (IsKeyPressed(KEY_T) && mEndingPoint == -1) {
+			mEndingPoint = mGrid.MarkStartOrEnd(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y), Cell::End);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <utility>
 
 static constexpr int sGridSize = 50;
 // Cell size is equal to 20, because we don't want to render the grid on the whole screen. We're leaving space for the GUI.
@@ -21,13 +22,14 @@ public:
 	Grid();
 	~Grid() = default;
 
-	const int ChooseStart(const int x, const int y);
-	const int ChooseEnd(const int x, const int y);
+	const int MarkStartOrEnd(const int x, const int y, Cell cellType);
 
 	void Paint(const int x, const int y, Cell cellType);
 
 	void Draw();
 
 private:
+	const std::pair<int, int> ScreenToGridCoords(const int x, const int y) const { return { x / sCellSize, y / sCellSize }; }
+
 	std::array<Cell, sGridSize * sGridSize> mGridData;
 };

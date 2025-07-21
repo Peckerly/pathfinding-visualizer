@@ -6,36 +6,23 @@ Grid::Grid() {
 	mGridData.fill(Cell::Empty);
 }
 
-const int Grid::ChooseStart(const int x, const int y)
-{
-	const int screenX = x / sCellSize;
-	const int screenY = y / sCellSize;
+const int Grid::MarkStartOrEnd(const int x, const int y, Cell cellType) {
+	auto [gridX, gridY] = ScreenToGridCoords(x, y);
 
-	if (screenX >= 0 && screenX < sGridSize && screenY >= 0 && screenY < sGridSize) {
-		mGridData[sGridSize * screenY + screenX] = Cell::Start;
-		return sGridSize * screenY + screenX;
-	}
-	return -1;
-}
-
-const int Grid::ChooseEnd(const int x, const int y)
-{
-	const int screenX = x / sCellSize;
-	const int screenY = y / sCellSize;
-
-	if (screenX >= 0 && screenX < sGridSize && screenY >= 0 && screenY < sGridSize) {
-		mGridData[sGridSize * screenY + screenX] = Cell::End;
-		return sGridSize * screenY + screenX;
+	if (gridX >= 0 && gridX < sGridSize && gridY >= 0 && gridY < sGridSize) {
+		const int index = sGridSize * gridY + gridX;
+		mGridData[index] = cellType;
+		return index;
 	}
 	return -1;
 }
 
 void Grid::Paint(const int x, const int y, Cell cellType) {
-	const int screenX = x / sCellSize;
-	const int screenY = y / sCellSize;
+	auto [gridX, gridY] = ScreenToGridCoords(x, y);
 
-	if (screenX >= 0 && screenX < sGridSize && screenY >= 0 && screenY < sGridSize) {
-		mGridData[sGridSize * screenY + screenX] = cellType;
+	if (gridX >= 0 && gridX < sGridSize && gridY >= 0 && gridY < sGridSize) {
+		const int index = sGridSize * gridY + gridX;
+		mGridData[index] = cellType;
 	}
 }
 
@@ -49,6 +36,10 @@ void Grid::Draw() {
 			}
 			case Cell::Start: {
 				cellColor = GREEN;
+				break;
+			}
+			case Cell::End: {
+				cellColor = RED;
 				break;
 			}
 			case Cell::Wall: {
