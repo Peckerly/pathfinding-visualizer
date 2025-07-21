@@ -21,6 +21,8 @@ public:
 	Grid();
 	~Grid() = default;
 
+	void Paint(const int x, const int y, Cell cellType);
+
 	void Draw();
 
 private:

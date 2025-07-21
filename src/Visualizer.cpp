@@ -19,7 +19,18 @@ Visualizer::~Visualizer()
 }
 
 void Visualizer::Update() {
-
+	switch (mVisState) {
+		case Stage::PaintWalls: {
+			if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+				auto mousePos = GetMousePosition();
+				mGrid.Paint(mousePos.x, mousePos.y, Cell::Wall);
+			}
+			break;
+		}
+		default: {
+			break;
+		}
+	}
 }
 
 void Visualizer::Render() {

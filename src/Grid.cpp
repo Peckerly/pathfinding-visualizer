@@ -6,6 +6,15 @@ Grid::Grid() {
 	mGridData.fill(Cell::Empty);
 }
 
+void Grid::Paint(const int x, const int y, Cell cellType) {
+	const int screenX = x / sCellSize;
+	const int screenY = y / sCellSize;
+
+	if (screenX >= 0 && screenX < sGridSize && screenY >= 0 && screenY < sGridSize) {
+		mGridData[sGridSize * screenY + screenX] = cellType;
+	}
+}
+
 void Grid::Draw() {
 	for (int i = 0; i < mGridData.size(); i++)
 	{
