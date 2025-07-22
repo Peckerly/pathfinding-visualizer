@@ -1,8 +1,8 @@
 #pragma once
 
 #include <array>
-#include <utility>
 #include <vector>
+#include <optional>
 
 static constexpr int sGridSize = 50;
 // Cell size is equal to 20, because we don't want to render the grid on the whole screen. We're leaving space for the GUI.
@@ -28,7 +28,7 @@ public:
 
 	std::vector<int> GetAdjacentCells(const int index);
 
-	const int MarkStartOrEnd(const int x, const int y, Cell cellType);
+	const std::optional<int> MarkStartOrEnd(const int x, const int y, Cell cellType);
 
 	void Paint(const int x, const int y, Cell cellType);
 

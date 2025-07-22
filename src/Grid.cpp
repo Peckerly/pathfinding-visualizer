@@ -32,15 +32,17 @@ std::vector<int> Grid::GetAdjacentCells(const int index) {
 	return outVec;
 }
 
-const int Grid::MarkStartOrEnd(const int x, const int y, Cell cellType) {
+const std::optional<int> Grid::MarkStartOrEnd(const int x, const int y, Cell cellType) {
 	auto [gridX, gridY] = ScreenToGridCoords(x, y);
 
 	if (IsValidIndex(gridX, gridY)) {
 		const int index = sGridSize * gridY + gridX;
-		mGridData[index] = cellType;
-		return index;
+		if (mGridData[index] != Cell::Start && mGridData[index] != Cell::End) {
+			mGridData[index] = cellType;
+			return index;
+		}
 	}
-	return -1;
+	return {};
 }
 
 
