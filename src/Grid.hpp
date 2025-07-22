@@ -2,6 +2,7 @@
 
 #include <array>
 #include <utility>
+#include <vector>
 
 static constexpr int sGridSize = 50;
 // Cell size is equal to 20, because we don't want to render the grid on the whole screen. We're leaving space for the GUI.
@@ -22,6 +23,11 @@ public:
 	Grid();
 	~Grid() = default;
 
+	Cell GetCellState(const int index) const { return mGridData[index]; }
+	void SetCellState(const int index, Cell cellState) { mGridData[index] = cellState; }
+
+	std::vector<int> GetAdjacentCells(const int index);
+
 	const int MarkStartOrEnd(const int x, const int y, Cell cellType);
 
 	void Paint(const int x, const int y, Cell cellType);
@@ -30,6 +36,9 @@ public:
 
 private:
 	const std::pair<int, int> ScreenToGridCoords(const int x, const int y) const { return { x / sCellSize, y / sCellSize }; }
+
+	const bool IsValidIndex(const int index) const { return index >= 0 && index < sGridSize * sGridSize; }
+	const bool IsValidIndex(const int x, const int y) const { return x >= 0 && x < sGridSize && y >= 0 && y < sGridSize; }
 
 	std::array<Cell, sGridSize * sGridSize> mGridData;
 };

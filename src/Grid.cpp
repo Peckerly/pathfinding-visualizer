@@ -6,10 +6,36 @@ Grid::Grid() {
 	mGridData.fill(Cell::Empty);
 }
 
+std::vector<int> Grid::GetAdjacentCells(const int index) {
+	std::vector<int> outVec;
+	outVec.reserve(8);
+
+	const int x = index % sGridSize;
+	const int y = index / sGridSize;
+
+	for (int i = -1; i <= 1; ++i) {
+		for (int j = -1; j <= 1; ++j) {
+			if (i == j) {
+				continue;
+			}
+
+			const int neighborX = x + i;
+			const int neighborY = y + j;
+
+			if (IsValidIndex(neighborX, neighborY)) {
+				const int neighborIndex = neighborY * sGridSize + neighborX;
+				outVec.push_back(neighborIndex);
+			}
+		}
+	}
+
+	return outVec;
+}
+
 const int Grid::MarkStartOrEnd(const int x, const int y, Cell cellType) {
 	auto [gridX, gridY] = ScreenToGridCoords(x, y);
 
-	if (gridX >= 0 && gridX < sGridSize && gridY >= 0 && gridY < sGridSize) {
+	if (IsValidIndex(gridX, gridY)) {
 		const int index = sGridSize * gridY + gridX;
 		mGridData[index] = cellType;
 		return index;
@@ -17,10 +43,11 @@ const int Grid::MarkStartOrEnd(const int x, const int y, Cell cellType) {
 	return -1;
 }
 
+
 void Grid::Paint(const int x, const int y, Cell cellType) {
 	auto [gridX, gridY] = ScreenToGridCoords(x, y);
 
-	if (gridX >= 0 && gridX < sGridSize && gridY >= 0 && gridY < sGridSize) {
+	if (IsValidIndex(gridX, gridY)) {
 		const int index = sGridSize * gridY + gridX;
 		mGridData[index] = cellType;
 	}
@@ -44,6 +71,10 @@ void Grid::Draw() {
 			}
 			case Cell::Wall: {
 				cellColor = DARKGRAY;
+				break;
+			}
+			case Cell::Visited: {
+				cellColor = DARKBLUE;
 				break;
 			}
 			default: {
