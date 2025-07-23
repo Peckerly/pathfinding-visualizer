@@ -23,6 +23,16 @@ std::vector<int> Grid::GetAdjacentCells(const int index) {
 			const int neighborY = y + j;
 
 			if (IsValidIndex(neighborX, neighborY)) {
+				//check if can go through corners
+				if (i != 0 && j != 0) {
+					int checkHorizontal = y * sGridSize + (x + i);
+					int checkVertical = (y + j) * sGridSize + x;
+
+					if (GetCellState(checkHorizontal) == Cell::Wall && GetCellState(checkVertical) == Cell::Wall) {
+						continue;
+					}
+				}
+
 				const int neighborIndex = neighborY * sGridSize + neighborX;
 				outVec.push_back(neighborIndex);
 			}
