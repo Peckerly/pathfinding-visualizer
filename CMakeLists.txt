@@ -25,5 +25,5 @@ if (raygui_ADDED)
 endif()
 
 add_executable (pathfinding-visualizer "src/main.cpp"  "src/Visualizer.cpp" "src/Visualizer.hpp" "src/Grid.cpp" "src/Grid.hpp" )
-target_compile_features (pathfinding-visualizer PRIVATE cxx_std_23)
+target_compile_features (pathfinding-visualizer PRIVATE cxx_std_20)
 target_link_libraries (pathfinding-visualizer PRIVATE raylib raygui)
