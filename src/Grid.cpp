@@ -79,6 +79,10 @@ void Grid::Draw() {
 				cellColor = DARKBLUE;
 				break;
 			}
+			case Cell::Path: {
+				cellColor = ORANGE;
+				break;
+			}
 			default: {
 				cellColor = BLACK;
 				break;

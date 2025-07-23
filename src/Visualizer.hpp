@@ -2,7 +2,6 @@
 
 #include "Grid.hpp"
 
-#include <thread>
 #include <queue>
 #include <stack>
 
@@ -20,15 +19,11 @@ public:
 
 	void InitPathfinding(const int selection);
 	void StartPathfinding(const int selection);
-
-	void BFS();
 private:
 	Grid mGrid;
 
 
 	// Pathfinding
-	std::thread mPathfindingThread;
-
 	std::queue<int> mQueue;
 	std::stack<int> mStack;
 

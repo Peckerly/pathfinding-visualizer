@@ -10,7 +10,6 @@ static constexpr int sCellSize = 20;
 
 enum class Cell : uint8_t {
 	Empty = 0,
-	Invalid,
 	Path,
 	Visited,
 	Start,
