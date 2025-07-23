@@ -22,7 +22,7 @@ Visualizer::~Visualizer()
 }
 
 void Visualizer::Update() {
-	if (!mIsPathfinding) {
+	if (mPathfindingLock && mParentCells.empty()) {
 		auto mousePos = GetMousePosition();
 		if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
 			mGrid.Paint(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y), Cell::Wall);
@@ -37,9 +37,7 @@ void Visualizer::Update() {
 			mTargetPoint = mGrid.MarkStartOrEnd(static_cast<int>(mousePos.x), static_cast<int>(mousePos.y), Cell::End);
 		}
 	}
-	else {
-		StartPathfinding(mAlgorithmSelected);
-	}
+	Pathfind();
 }
 
 void Visualizer::DrawGUI() {
@@ -47,12 +45,13 @@ void Visualizer::DrawGUI() {
 	DrawText("Press T to mark the target point at the current mouse position", 1050, 150, 20, RED);
 	DrawText("Use your left/right mouse keys to draw/erase walls", 1050, 200, 20, WHITE);
 
-	if (GuiDropdownBox(Rectangle{ .x = 1050, .y = 250, .width = 300, .height = 100 }, "BFS;DFS", &mAlgorithmSelected, mDropdownEditMode)) {
+	if (GuiDropdownBox(Rectangle{ .x = 1050, .y = 250, .width = 300, .height = 100 }, "BFS;DFS", &mAlgorithmIndex, mDropdownEditMode)) {
 		mDropdownEditMode = !mDropdownEditMode;
+		mSelectedAlgorithm = static_cast<Algorithm>(mAlgorithmIndex);
 	}
 
-	if (GuiButton(Rectangle{ .x = 1400, .y = 250, .width = 300, .height = 100 }, "Start") && !mIsPathfinding) {
-		InitPathfinding(mAlgorithmSelected);
+	if (GuiButton(Rectangle{ .x = 1400, .y = 250, .width = 300, .height = 100 }, "Start") && mPathfindingLock) {
+		InitPathfinding();
 	}
 }
 
@@ -74,63 +73,94 @@ void Visualizer::Run() {
 	}
 }
 
-void Visualizer::InitPathfinding(const int selection)
+void Visualizer::InitPathfinding()
 {
-	switch (selection) {
-		case 0: {
+	if (!mStartPoint.has_value() && !mTargetPoint.has_value()) {
+		return;
+	}
+
+	if (!mParentCells.empty()) {
+		return;
+	}
+
+	switch (mSelectedAlgorithm) {
+		case Algorithm::BFS: {
 			mQueue.push(mStartPoint.value());
 			mGrid.SetCellState(mStartPoint.value(), Cell::Visited);
 			break;
 		}
-		case 1: {
+		case Algorithm::DFS: {
 			mStack.push(mStartPoint.value());
 			mGrid.SetCellState(mStartPoint.value(), Cell::Visited);
 			break;
 		}
 	}
-	mIsPathfinding = true;
+	mPathfindingLock = false;
 }
 
-void Visualizer::StartPathfinding(const int selection)
+void Visualizer::Pathfind()
 {
-	switch (selection) {
-		case 0: {
+	if (mPathfindingLock) {
+		return;
+	}
+
+	switch (mSelectedAlgorithm) {
+		case Algorithm::BFS: {
 			if (!mQueue.empty()) {
 				int curr = mQueue.front();
 				mQueue.pop();
 				for (auto& cell : mGrid.GetAdjacentCells(curr)) {
-					if (mGrid.GetCellState(cell) == Cell::End) {
-						mIsPathfinding = false;
+					if (cell == mTargetPoint.value()) {
+						mPathfindingLock = true;
+						mParentCells[cell] = curr;
+						Backtrace();
+						return;
 					}
 					if (mGrid.GetCellState(cell) != Cell::Visited && mGrid.GetCellState(cell) != Cell::Wall) {
 						mQueue.push(cell);
+						mParentCells[cell] = curr;
 						mGrid.SetCellState(cell, Cell::Visited);
 					}
 				}
 			}
 			else {
-				mIsPathfinding = false;
+				mPathfindingLock = true;
 			}
 			break;
 		}
-		case 1: {
+		case Algorithm::DFS: {
 			if (!mStack.empty()) {
 				int curr = mStack.top();
 				mStack.pop();
 				for (auto& cell : mGrid.GetAdjacentCells(curr)) {
-					if (mGrid.GetCellState(cell) == Cell::End) {
-						mIsPathfinding = false;
+					if (cell == mTargetPoint.value()) {
+						mPathfindingLock = true;
+						mParentCells[cell] = curr;
+						Backtrace();
+						break;
 					}
 					if (mGrid.GetCellState(cell) != Cell::Visited && mGrid.GetCellState(cell) != Cell::Wall) {
 						mStack.push(cell);
+						mParentCells[cell] = curr;
 						mGrid.SetCellState(cell, Cell::Visited);
 					}
 				}
 			}
 			else {
-				mIsPathfinding = false;
+				mPathfindingLock = true;
 			}
 			break;
 		}
+	}
+}
+
+void Visualizer::Backtrace() {
+	if (mParentCells.count(mTargetPoint.value())) {
+		int curr = mTargetPoint.value();
+		while (curr != mStartPoint.value()) {
+			curr = mParentCells.at(curr);
+			mGrid.SetCellState(curr, Cell::Path);
+		}
+		mGrid.SetCellState(curr, Cell::Start);
 	}
 }

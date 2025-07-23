@@ -4,8 +4,13 @@
 
 #include <queue>
 #include <stack>
-
+#include <map>
 #include <optional>
+
+enum class Algorithm : bool {
+	BFS = 0,
+	DFS
+};
 
 class Visualizer {
 public:
@@ -17,21 +22,26 @@ public:
 	void Render();
 	void Run();
 
-	void InitPathfinding(const int selection);
-	void StartPathfinding(const int selection);
+	void InitPathfinding();
+	void Pathfind();
+	void Backtrace();
 private:
 	Grid mGrid;
 
-
 	// Pathfinding
+
+	Algorithm mSelectedAlgorithm = Algorithm::BFS;
+
 	std::queue<int> mQueue;
 	std::stack<int> mStack;
+
+	std::map<int, int> mParentCells;
 
 	std::optional<int> mStartPoint;
 	std::optional<int> mTargetPoint;
 
-	int mAlgorithmSelected = 0;
+	int mAlgorithmIndex = 0;
 	bool mDropdownEditMode = false;
 
-	bool mIsPathfinding = false;
+	bool mPathfindingLock = true;
 };
