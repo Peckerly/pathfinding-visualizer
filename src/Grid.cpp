@@ -6,7 +6,7 @@ Grid::Grid() {
 	mGridData.fill(Cell::Empty);
 }
 
-std::vector<int> Grid::GetAdjacentCells(const int index) {
+const std::vector<int> Grid::GetAdjacentCells(const int index) const {
 	std::vector<int> outVec;
 	outVec.reserve(8);
 
@@ -15,7 +15,7 @@ std::vector<int> Grid::GetAdjacentCells(const int index) {
 
 	for (int i = -1; i <= 1; ++i) {
 		for (int j = -1; j <= 1; ++j) {
-			if (i == j) {
+			if (i == 0 && j == 0) {
 				continue;
 			}
 

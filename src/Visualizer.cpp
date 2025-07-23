@@ -75,7 +75,7 @@ void Visualizer::Run() {
 
 void Visualizer::InitPathfinding()
 {
-	if (!mStartPoint.has_value() && !mTargetPoint.has_value()) {
+	if (!mStartPoint.has_value() || !mTargetPoint.has_value()) {
 		return;
 	}
 
@@ -109,7 +109,7 @@ void Visualizer::Pathfind()
 			if (!mQueue.empty()) {
 				int curr = mQueue.front();
 				mQueue.pop();
-				for (auto& cell : mGrid.GetAdjacentCells(curr)) {
+				for (auto cell : mGrid.GetAdjacentCells(curr)) {
 					if (cell == mTargetPoint.value()) {
 						mPathfindingLock = true;
 						mParentCells[cell] = curr;
@@ -132,7 +132,7 @@ void Visualizer::Pathfind()
 			if (!mStack.empty()) {
 				int curr = mStack.top();
 				mStack.pop();
-				for (auto& cell : mGrid.GetAdjacentCells(curr)) {
+				for (auto cell : mGrid.GetAdjacentCells(curr)) {
 					if (cell == mTargetPoint.value()) {
 						mPathfindingLock = true;
 						mParentCells[cell] = curr;

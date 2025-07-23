@@ -25,7 +25,7 @@ public:
 	Cell GetCellState(const int index) const { return mGridData[index]; }
 	void SetCellState(const int index, Cell cellState) { mGridData[index] = cellState; }
 
-	std::vector<int> GetAdjacentCells(const int index);
+	const std::vector<int> GetAdjacentCells(const int index) const;
 
 	const std::optional<int> MarkStartOrEnd(const int x, const int y, Cell cellType);
 
