@@ -51,6 +51,9 @@ void Grid::Paint(const int x, const int y, Cell cellType) {
 
 	if (IsValidIndex(gridX, gridY)) {
 		const int index = sGridSize * gridY + gridX;
+		if (mGridData[index] == Cell::Start || mGridData[index] == Cell::End) {
+			return;
+		}
 		mGridData[index] = cellType;
 	}
 }
