@@ -109,3 +109,7 @@ void Grid::Draw() {
 		DrawRectangleLines(x, y, sCellSize, sCellSize, BLACK);
 	}
 }
+
+void Grid::Reset() {
+	mGridData.fill(Cell::Empty);
+}

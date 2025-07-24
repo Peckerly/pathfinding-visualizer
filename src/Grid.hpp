@@ -33,6 +33,7 @@ public:
 
 	void Draw();
 
+	void Reset();
 private:
 	const std::pair<int, int> ScreenToGridCoords(const int x, const int y) const { return { x / sCellSize, y / sCellSize }; }
 

@@ -53,6 +53,11 @@ void Visualizer::DrawGUI() {
 	if (GuiButton(Rectangle{ .x = 1400, .y = 250, .width = 300, .height = 100 }, "Start") && mPathfindingLock) {
 		InitPathfinding();
 	}
+
+	if (GuiButton(Rectangle{ .x = 1225, .y = 550, .width = 300, .height = 100 }, "Reset") && mPathfindingLock)
+	{
+		ResetPathfinding();
+	}
 }
 
 void Visualizer::Render() {
@@ -163,4 +168,13 @@ void Visualizer::Backtrace() {
 		}
 		mGrid.SetCellState(curr, Cell::Start);
 	}
+}
+
+void Visualizer::ResetPathfinding() {
+	mGrid.Reset();
+	std::queue<int>().swap(mQueue);
+	std::stack<int>().swap(mStack);
+	mParentCells.clear();
+	mStartPoint.reset();
+	mTargetPoint.reset();
 }

@@ -25,6 +25,8 @@ public:
 	void InitPathfinding();
 	void Pathfind();
 	void Backtrace();
+
+	void ResetPathfinding();
 private:
 	Grid mGrid;
 
