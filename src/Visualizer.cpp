@@ -54,7 +54,7 @@ void Visualizer::DrawGUI() {
 		InitPathfinding();
 	}
 
-	if (GuiButton(Rectangle{ .x = 1225, .y = 550, .width = 300, .height = 100 }, "Reset") && mPathfindingLock)
+	if (GuiButton(Rectangle{ .x = 1225, .y = 600, .width = 300, .height = 100 }, "Reset") && mPathfindingLock)
 	{
 		ResetPathfinding();
 	}
